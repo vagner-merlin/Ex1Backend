@@ -17,3 +17,4 @@ urlpatterns = [
     # APIs del CRUD (ViewSet)
     path('', include(router.urls)),
 ]
+ 
