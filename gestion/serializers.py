@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Guardia, Secretaria, Administrador, Propietario
+from .models import Guardia, Secretaria, Administrador, Propietario, AreaSocial, ReservaArea
 
 # ------------------------------------------------------------------
 # Serializador para el modelo Guardia
@@ -100,3 +100,19 @@ class GuardiaCreateSerializer(serializers.ModelSerializer):
         return value
     
     # ✅ ESTE SERIALIZER SÍ PERMITE: Crear guardias asignando users existentes
+
+
+class AreaSocialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AreaSocial
+        fields = '__all__'
+
+class ReservaAreaSerializer(serializers.ModelSerializer):
+    # Campos de solo lectura para mostrar información del propietario y área
+    propietario_codigo = serializers.CharField(source='propietario.codigo_propietario', read_only=True)
+    propietario_username = serializers.CharField(source='propietario.user.username', read_only=True)
+    area_social_nombre = serializers.CharField(source='area_social.nombre', read_only=True)
+    
+    class Meta:
+        model = ReservaArea
+        fields = '__all__'

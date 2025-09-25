@@ -1,12 +1,10 @@
 from django.db import models
 
-from gestion.models import Propietario
 
-# Create your models here.
 class UnidadHabitacional(models.Model):
     # La clave foránea que apunta al Propietario
     propietario = models.ForeignKey(
-        Propietario,
+        'gestion.Propietario',  # ✅ String reference
         on_delete=models.CASCADE,
         related_name='unidades_habitacionales'
     )

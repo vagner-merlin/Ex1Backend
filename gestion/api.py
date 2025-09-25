@@ -1,10 +1,12 @@
 from rest_framework import viewsets, permissions
-from .models import Guardia, Secretaria, Administrador, Propietario
+from .models import Guardia, Secretaria, Administrador, Propietario, AreaSocial, ReservaArea
 from .serializers import (
     GuardiaSerializer, 
     SecretariaSerializer, 
     AdministradorSerializer, 
-    PropietarioSerializer
+    PropietarioSerializer,
+    AreaSocialSerializer,
+    ReservaAreaSerializer
 )
 
 # =================================================================
@@ -30,3 +32,13 @@ class PropietarioViewSet(viewsets.ModelViewSet):
     queryset = Propietario.objects.all()
     permission_classes = [permissions.AllowAny]
     serializer_class = PropietarioSerializer
+
+class AreaSocialViewSet(viewsets.ModelViewSet):
+    queryset = AreaSocial.objects.all()
+    permission_classes = [permissions.AllowAny]
+    serializer_class = AreaSocialSerializer
+
+class ReservaAreaViewSet(viewsets.ModelViewSet):
+    queryset = ReservaArea.objects.all()
+    permission_classes = [permissions.AllowAny]
+    serializer_class = ReservaAreaSerializer
