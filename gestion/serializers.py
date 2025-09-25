@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Guardia, Secretaria, Administrador, Propietario, AreaSocial, ReservaArea
+from .models import Guardia, Secretaria, Administrador, Propietario, AreaSocial, ReservaArea, Visita, Queja, Deuda
 
 # ------------------------------------------------------------------
 # Serializador para el modelo Guardia
@@ -115,4 +115,19 @@ class ReservaAreaSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = ReservaArea
+        fields = '__all__'
+
+class VisitaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Visita
+        fields = '__all__'
+
+class QuejaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Queja
+        fields = '__all__'
+
+class DeudaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Deuda
         fields = '__all__'

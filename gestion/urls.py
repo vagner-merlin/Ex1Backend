@@ -10,7 +10,9 @@ router.register(r'administradores', api.AdministradorViewSet, basename='administ
 router.register(r'propietarios', api.PropietarioViewSet, basename='propietarios')
 router.register(r'areas-sociales', api.AreaSocialViewSet, basename='areas-sociales')
 router.register(r'reservas-areas', api.ReservaAreaViewSet, basename='reservas-areas')
-
+router.register(r'visitas', api.VisitaViewSet, basename='visitas')
+router.register(r'quejas', api.QuejaViewSet, basename='quejas')
+router.register(r'deudas', api.DeudaViewSet, basename='deudas')
 # URLs de la app gestion
 urlpatterns = [
     path('', include(router.urls)),
