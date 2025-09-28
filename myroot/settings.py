@@ -97,6 +97,16 @@ DATABASES = {
         conn_max_age=600
     )
 }
+#DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'postgres',
+#         'USER': 'postgres',
+#         'PASSWORD': '21_12_2001Vvvvv',
+#         'HOST': 'databasec.ctqiguwke0on.us-east-2.rds.amazonaws.com',
+#         'PORT': '5432',
+#     }
+# }
 
 
 # Password validation
