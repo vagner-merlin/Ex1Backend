@@ -14,6 +14,9 @@ class Propietario(models.Model):
     codigo_propietario = models.CharField(max_length=20, unique=True)
     
 
+    def __str__(self):
+        return f"Propietario: {self.perfil.user.username}"
+
 class Queja(models.Model):
     propietarios = models.ForeignKey(
         Propietario, 
