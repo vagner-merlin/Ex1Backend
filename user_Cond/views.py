@@ -4,7 +4,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.models import Token  # ✅ Import correcto
 from django.contrib.auth.models import User
 from django.db import transaction
 from .models import PerfilUser
@@ -81,7 +81,7 @@ def Register(request):
             print(f"✅ PerfilUser creado: ID={perfil_user.id}, Tipo={perfil_user.tipo_usuario}")
             
             # CREAR TOKEN PARA AUTENTICACIÓN INMEDIATA
-            token = Token.objects.create(user=user)
+            token = Token.objects.create(user=user)  # ✅ Ahora debería funcionar
             
             return Response({
                 "message": "Registration successful",
