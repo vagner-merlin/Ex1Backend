@@ -16,7 +16,9 @@ urlpatterns = [
     
     # Authentication endpoints
     path('auth/register/', views.Register, name='register'),
+    path('auth/register-secretaria/', views.RegisterSecretaria, name='register-secretaria'),  # ✅ Nueva ruta
     path('auth/login/', views.Login, name='login'),
     path('auth/profile/', views.Profile, name='profile'),
     path('auth/logout/', views.Logout, name='logout'),
+    path('auth/create-user-complete/', views.CreateUserComplete, name='create-user-complete'), 
 ]

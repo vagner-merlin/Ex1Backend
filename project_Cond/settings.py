@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,7 +26,7 @@ SECRET_KEY = 'django-insecure-=nz9@-pletbclwen)=5u)p!d0j#5eg2akgal2t_a#joj&3v*d0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,16 +38,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'user_Cond',
     'rest_framework',
     'rest_framework.authtoken',
-    'Finanzas_Cond',
+    'corsheaders',
+    'user_Cond',
     'Administracion_Cond',
-    'Propietarios_Cond',
     'Seguridad_Cond',
+    'Propietarios_Cond',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -79,12 +81,33 @@ WSGI_APPLICATION = 'project_Cond.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': BASE_DIR / 'db.sqlite3',
+#    }
+#}
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'myproject',         # Reemplaza con el nombre de tu base de datos
+        'USER': 'postgres',        # Reemplaza con tu nombre de usuario de PostgreSQL
+        'PASSWORD': 'adminn',       # Reemplaza con tu contraseña
+        'HOST': '127.0.0.1',               # O la IP/nombre del servidor (ej: '127.0.0.1')
+        'PORT': '5432',                    # El puerto predeterminado para PostgreSQL
     }
 }
+
+#DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'postgres',
+#         'USER': 'postgres',
+#         'PASSWORD': '21_12_2001Vvvvv',
+#         'HOST': 'databasec.ctqiguwke0on.us-east-2.rds.amazonaws.com',
+#         'PORT': '5432',
+#     }
+# }
 
 
 # Password validation
@@ -127,3 +150,93 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# =================================================================
+# CORS CONFIGURATION - ACCESO UNIVERSAL
+# =================================================================
+
+# ✅ PERMITIR TODOS LOS ORÍGENES
+CORS_ALLOW_ALL_ORIGINS = True
+
+# ✅ Permitir credenciales
+CORS_ALLOW_CREDENTIALS = True
+
+# ✅ Headers permitidos
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    'access-control-allow-origin',
+    'access-control-allow-headers',
+    'access-control-allow-methods',
+    'cache-control',
+]
+
+# ✅ Métodos HTTP permitidos
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+    'HEAD',
+]
+
+# =================================================================
+# SECURITY SETTINGS - DESARROLLO
+# =================================================================
+
+# ✅ Permitir cualquier host
+ALLOWED_HOSTS = ['*']
+
+# ✅ Configuración de desarrollo
+SECURE_SSL_REDIRECT = False
+SECURE_BROWSER_XSS_FILTER = False
+SECURE_CONTENT_TYPE_NOSNIFF = False
+
+# ✅ Configuración de cookies
+CSRF_COOKIE_SAMESITE = None
+CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SAMESITE = None
+SESSION_COOKIE_SECURE = False
+
+# ✅ CSRF_TRUSTED_ORIGINS corregido (URLs específicas)
+CSRF_TRUSTED_ORIGINS = [
+    'http://127.0.0.1:8000',
+    'http://localhost:8000',
+    'http://127.0.0.1:5174',  # Tu frontend
+    'http://localhost:5174',   # Tu frontend alternativo
+    'http://localhost:3000',   # React típico
+    'https://tu-dominio.com',  # Si tienes dominio
+]
+
+# =================================================================
+# REST FRAMEWORK
+# =================================================================
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ],
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
+    ]
+}
