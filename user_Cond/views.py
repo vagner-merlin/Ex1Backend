@@ -607,3 +607,112 @@ def CreateUserComplete(request):
             'error': 'User creation failed', 
             'details': str(e)
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# =================================================================
+# REGISTER ADMINISTRADOR - Crear User + PerfilUser (sin tabla Administrador)
+# =================================================================
+@api_view(['POST'])
+def RegisterAdministrador(request):
+    """
+    Registro específico para Administradores - Crea SOLO User y PerfilUser
+    NO crea tabla Administrador porque no existe
+    ADMINISTRADOR: is_staff=True, is_superuser=False, tipo_usuario="ADMINISTRADOR"
+    """
+    try:
+        with transaction.atomic():
+            # DATOS PARA AUTH_USER
+            username = request.data.get('username')
+            email = request.data.get('email')
+            password = request.data.get('password')
+            first_name = request.data.get('first_name', '')
+            last_name = request.data.get('last_name', '')
+            
+            # DATOS PARA PERFILUSER
+            telefono = request.data.get('telefono', '')
+            direccion = request.data.get('direccion', '')
+            sexo = request.data.get('sexo', '')
+            
+            # VALIDACIONES BÁSICAS
+            if not username or not email or not password:
+                return Response({
+                    'error': 'Username, email and password are required'
+                }, status=status.HTTP_400_BAD_REQUEST)
+            
+            # Verificar si el usuario ya existe
+            if User.objects.filter(username=username).exists():
+                return Response({
+                    'error': 'Username already exists'
+                }, status=status.HTTP_400_BAD_REQUEST)
+                
+            if User.objects.filter(email=email).exists():
+                return Response({
+                    'error': 'Email already exists'
+                }, status=status.HTTP_400_BAD_REQUEST)
+            
+            # PASO 1: CREAR USUARIO EN AUTH_USER
+            user = User.objects.create_user(
+                username=username,
+                email=email,
+                password=password,
+                first_name=first_name,
+                last_name=last_name,
+                is_superuser=False,  # Administrador NO es superuser
+                is_staff=True,       # Administrador SÍ tiene acceso staff
+                is_active=True
+            )
+            
+            print(f"✅ Usuario creado: ID={user.id}, Username={user.username}, Tipo=ADMINISTRADOR")
+            
+            # PASO 2: CREAR PERFIL DE USUARIO (tipo_usuario = ADMINISTRADOR)
+            perfil_user = PerfilUser.objects.create(
+                user=user,  # FK al usuario recién creado
+                tipo_usuario='ADMINISTRADOR',  # Automático para administradores
+                telefono=telefono,
+                direccion=direccion,
+                sexo=sexo if sexo in ['M', 'F', 'O'] else None,
+                imagen_perfil_url=None
+            )
+            
+            print(f"✅ PerfilUser creado: ID={perfil_user.id}, Tipo=ADMINISTRADOR")
+            
+            # ❌ NO SE CREA TABLA ADMINISTRADOR PORQUE NO EXISTE
+            # Solo se identifican por perfil_user.tipo_usuario = "ADMINISTRADOR"
+            
+            # PASO 3: CREAR TOKEN PARA AUTENTICACIÓN
+            token = Token.objects.create(user=user)
+            
+            return Response({
+                "message": "Administrador registration successful",
+                "token": token.key,
+                "user": {
+                    "id": user.id,
+                    "username": user.username,
+                    "email": user.email,
+                    "first_name": user.first_name,
+                    "last_name": user.last_name,
+                    "is_superuser": user.is_superuser,  # False
+                    "is_staff": user.is_staff           # True
+                },
+                "perfil": {
+                    "id": perfil_user.id,
+                    "tipo_usuario": perfil_user.tipo_usuario,  # "ADMINISTRADOR"
+                    "tipo_usuario_display": perfil_user.get_tipo_usuario_display(),  # "Administrador"
+                    "telefono": perfil_user.telefono,
+                    "direccion": perfil_user.direccion,
+                    "sexo": perfil_user.sexo,
+                    "imagen_perfil_url": perfil_user.imagen_perfil_url
+                },
+                "permissions": {
+                    "is_staff": True,
+                    "is_superuser": False,
+                    "access_level": "ADMINISTRADOR",
+                    "note": "Administrador identificado por perfil.tipo_usuario"
+                }
+            }, status=status.HTTP_201_CREATED)
+            
+    except Exception as e:
+        print(f"❌ Error en registro de administrador: {str(e)}")
+        return Response({
+            'error': 'Administrador registration failed', 
+            'details': str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

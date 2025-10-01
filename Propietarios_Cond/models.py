@@ -70,3 +70,10 @@ class RegistroAreaSocial(models.Model):
         related_name='registros'
     )
     is_principal = models.BooleanField(default=False)
+    user = models.ForeignKey(
+        Propietario, 
+        on_delete=models.CASCADE,
+        related_name='registros_area_social',
+        null=True,  # ✅ Permite valores nulos temporalmente
+        blank=True  # ✅ Permite campos vacíos en formularios
+    )

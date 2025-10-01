@@ -21,4 +21,5 @@ urlpatterns = [
     path('auth/profile/', views.Profile, name='profile'),
     path('auth/logout/', views.Logout, name='logout'),
     path('auth/create-user-complete/', views.CreateUserComplete, name='create-user-complete'), 
+    path('auth/register-administrador/', views.RegisterAdministrador, name='register-administrador'),  # ✅ Nueva ruta
 ]
