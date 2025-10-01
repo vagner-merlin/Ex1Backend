@@ -90,10 +90,10 @@ WSGI_APPLICATION = 'project_Cond.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'myproject',         # Reemplaza con el nombre de tu base de datos
+        'NAME': 'project',         # Reemplaza con el nombre de tu base de datos
         'USER': 'postgres',        # Reemplaza con tu nombre de usuario de PostgreSQL
-        'PASSWORD': 'adminn',       # Reemplaza con tu contraseña
-        'HOST': '127.0.0.1',               # O la IP/nombre del servidor (ej: '127.0.0.1')
+        'PASSWORD': '21_12_2001Vvvvv',       # Reemplaza con tu contraseña
+        'HOST': 'databasec.ctqiguwke0on.us-east-2.rds.amazonaws.com',               # O la IP/nombre del servidor (ej: '127.0.0.1')
         'PORT': '5432',                    # El puerto predeterminado para PostgreSQL
     }
 }
